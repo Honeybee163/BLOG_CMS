@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post • Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #5e503f;
+            --text-color: #eae0d5;
+            --accent-color: #c6ac8f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: "Outfit", system-ui, sans-serif;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover { color: var(--bg-color); }
+
+        .container {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .brand {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            text-decoration: none;
+        }
+
+        .nav-links { display: flex; align-items: center; gap: 20px; font-size: 0.9rem; }
+
+        .nav-button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 2px solid var(--bg-color);
+            background: transparent;
+            color: var(--bg-color);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .nav-button__primary { background: var(--bg-color); color: var(--text-color); }
+        .nav-button__primary:hover { background: var(--accent-color); border-color: var(--accent-color); }
+
+        main {
+            padding: 48px 0 64px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .back-link::before { content: "←"; }
+
+        .page-title {
+            font-family: "DM Serif Display", serif;
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 0.95rem;
+            color: var(--bg-color);
+            opacity: 0.75;
+            margin-bottom: 28px;
+        }
+
+        .post-form p { margin-bottom: 18px; }
+
+        .post-form label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--bg-color);
+        }
+
+        .post-form input[type="text"],
+        .post-form input[type="file"],
+        .post-form textarea,
+        .post-form select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--accent-color);
+            border-radius: 4px;
+            background: transparent;
+            color: var(--bg-color);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .post-form input::placeholder,
+        .post-form textarea::placeholder {
+            color: var(--bg-color);
+            opacity: 0.5;
+        }
+
+        .post-form input:focus,
+        .post-form textarea:focus,
+        .post-form select:focus {
+            border-color: var(--bg-color);
+            box-shadow: 0 0 0 2px rgba(94, 80, 63, 0.2);
+        }
+
+        .post-form input[type="file"] {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .post-form input[type="file"]::-webkit-file-upload-button {
+            padding: 8px 14px;
+            border-radius: 4px;
+            border: 2px solid var(--accent-color);
+            background: transparent;
+            color: var(--bg-color);
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-right: 12px;
+        }
+
+        .post-form input[type="submit"] {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 4px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .post-form input[type="submit"]:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        @media (max-width: 640px) {
+            .page-title { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="navbar">
+            <a href="{% url 'home' %}" class="brand">Ink & Ideas</a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-button">Home</a>
+                {% if user.is_authenticated %}
+                    <span style="font-size: 0.9rem; color: var(--bg-color); opacity: 0.9;">Hi, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="nav-button">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-button">Login</a>
+                    <a href="{% url 'register' %}" class="nav-button nav-button__primary">Register</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <main>
+            <a href="{% url 'home' %}" class="back-link">Back to posts</a>
+
+            <h1 class="page-title">Create a new post</h1>
+            <p class="page-subtitle">Share your thoughts with the world.</p>
+
+            <form action="" method="POST" class="post-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Publish post">
+            </form>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} • Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #5e503f;
+            --text-color: #eae0d5;
+            --accent-color: #c6ac8f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: "Outfit", system-ui, sans-serif;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover { color: var(--bg-color); }
+
+        .container {
+            width: 100%;
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .brand {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            text-decoration: none;
+        }
+
+        .nav-links { display: flex; align-items: center; gap: 20px; font-size: 0.9rem; }
+
+        .nav-button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 2px solid var(--bg-color);
+            background: transparent;
+            color: var(--bg-color);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .nav-button__primary { background: var(--bg-color); color: var(--text-color); }
+        .nav-button__primary:hover { background: var(--accent-color); border-color: var(--accent-color); }
+
+        main {
+            padding: 48px 0 64px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .back-link::before { content: "←"; }
+
+        .post-title {
+            font-family: "DM Serif Display", serif;
+            font-size: 2.25rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .post-meta {
+            font-size: 0.9rem;
+            color: var(--bg-color);
+            opacity: 0.7;
+            margin-bottom: 24px;
+        }
+
+        .post-category-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent-color);
+            margin-bottom: 12px;
+        }
+
+        .post-cover {
+            margin-bottom: 28px;
+            border-radius: 8px;
+            overflow: hidden;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 2px 12px rgba(94, 80, 63, 0.08);
+            max-height: 420px;
+        }
+
+        .post-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .post-content {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: var(--bg-color);
+            opacity: 0.9;
+        }
+
+        .post-content p + p { margin-top: 1.25rem; }
+
+        .comments-section {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 2px solid var(--accent-color);
+        }
+
+        .comments-title {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            margin-bottom: 20px;
+        }
+
+        .comment-form p { margin-bottom: 14px; }
+
+        .comment-form label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--bg-color);
+        }
+
+        .comment-form input[type="text"],
+        .comment-form input[type="email"],
+        .comment-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--accent-color);
+            border-radius: 4px;
+            background: transparent;
+            color: var(--bg-color);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .comment-form input::placeholder,
+        .comment-form textarea::placeholder {
+            color: var(--bg-color);
+            opacity: 0.5;
+        }
+
+        .comment-form input:focus,
+        .comment-form textarea:focus {
+            border-color: var(--bg-color);
+            box-shadow: 0 0 0 2px rgba(94, 80, 63, 0.2);
+        }
+
+        .comment-form input[type="submit"] {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .comment-form input[type="submit"]:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .comment-list { margin-top: 24px; }
+
+        .comment-item {
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(94, 80, 63, 0.15);
+        }
+
+        .comment-item:last-child { border-bottom: none; }
+
+        .comment-author {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 4px;
+        }
+
+        .comment-text {
+            font-size: 0.95rem;
+            color: var(--bg-color);
+            opacity: 0.9;
+        }
+
+        .comment-meta {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 640px) {
+            .post-title { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="navbar">
+            <a href="{% url 'home' %}" class="brand">Ink & Ideas</a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-button">Home</a>
+                {% if user.is_authenticated %}
+                    <span style="font-size: 0.9rem; color: var(--bg-color); opacity: 0.9;">Hi, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="nav-button">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-button">Login</a>
+                    <a href="{% url 'register' %}" class="nav-button nav-button__primary">Register</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <main>
+            <a href="{% url 'home' %}" class="back-link">Back to posts</a>
+
+            {% if post.category %}
+                <span class="post-category-tag">{{ post.category.name }}</span>
+            {% endif %}
+
+            <h1 class="post-title">{{ post.title }}</h1>
+            <p class="post-meta">
+                By {{ post.author }} • {{ post.pub_date|date:"M d, Y" }}
+            </p>
+
+            {% if post.featured_image %}
+                <div class="post-cover">
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                </div>
+            {% endif %}
+
+            <article class="post-content">
+                {{ post.content|linebreaks }}
+            </article>
+
+            <section class="comments-section">
+                <h2 class="comments-title">Comments</h2>
+
+                {% for comment in post.comment_set.all %}
+                    <div class="comment-item">
+                        <div class="comment-author">{{ comment.author.username }}</div>
+                        <p class="comment-text">{{ comment.text }}</p>
+                        <div class="comment-meta">{{ comment.timestamp|date:"M d, Y H:i" }}</div>
+                    </div>
+                {% endfor %}
+
+                <form method="POST" class="comment-form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Add Comment">
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

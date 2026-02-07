@@ -1,0 +1,483 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile • Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #5e503f;
+            --text-color: #eae0d5;
+            --accent-color: #c6ac8f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: "Outfit", system-ui, sans-serif;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover { color: var(--bg-color); }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .brand {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            text-decoration: none;
+        }
+
+        .nav-links { display: flex; align-items: center; gap: 20px; font-size: 0.9rem; }
+
+        .nav-button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 2px solid var(--bg-color);
+            background: transparent;
+            color: var(--bg-color);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .nav-button__primary { background: var(--bg-color); color: var(--text-color); }
+        .nav-button__primary:hover { background: var(--accent-color); border-color: var(--accent-color); }
+
+        main {
+            padding: 48px 0 64px;
+            background: #fff;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 2px 12px rgba(94, 80, 63, 0.08);
+            margin-top: 48px;
+            padding: 40px;
+        }
+
+        .profile-header { text-align: center; margin-bottom: 32px; }
+
+        .profile-image-wrapper {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 2px 12px rgba(94, 80, 63, 0.12);
+        }
+
+        .profile-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-username {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            margin-bottom: 6px;
+        }
+
+        .profile-email {
+            font-size: 0.95rem;
+            color: var(--bg-color);
+            opacity: 0.75;
+            margin-bottom: 20px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: 2px solid var(--bg-color);
+            background: transparent;
+            color: var(--bg-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .btn-primary {
+            background: var(--bg-color);
+            color: var(--text-color);
+            border-color: var(--bg-color);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        #edit-form {
+            display: none;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 2px solid var(--accent-color);
+        }
+
+        #edit-form.active { display: block; }
+
+        .form-section { margin-bottom: 24px; }
+
+        .form-section-title {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            margin-bottom: 14px;
+        }
+
+        .profile-form p { margin-bottom: 14px; }
+
+        .profile-form label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--bg-color);
+        }
+
+        .profile-form input[type="text"],
+        .profile-form input[type="email"],
+        .profile-form input[type="file"],
+        .profile-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--accent-color);
+            border-radius: 4px;
+            background: transparent;
+            color: var(--bg-color);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .profile-form input::placeholder,
+        .profile-form textarea::placeholder {
+            color: var(--bg-color);
+            opacity: 0.5;
+        }
+
+        .profile-form input:focus,
+        .profile-form textarea:focus {
+            border-color: var(--bg-color);
+            box-shadow: 0 0 0 2px rgba(94, 80, 63, 0.2);
+        }
+
+        .profile-form input[type="file"] {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .profile-form input[type="file"]::-webkit-file-upload-button {
+            padding: 8px 14px;
+            border-radius: 4px;
+            border: 2px solid var(--accent-color);
+            background: transparent;
+            color: var(--bg-color);
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-right: 12px;
+        }
+
+        .profile-form input[type="submit"] {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .profile-form input[type="submit"]:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .cancel-btn { margin-left: 12px; }
+
+        /* My Blogs section */
+        .my-blogs-section {
+            margin-top: 36px;
+            padding-top: 32px;
+            border-top: 2px solid var(--accent-color);
+        }
+
+        .section-title {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            margin-bottom: 24px;
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 640px) {
+            .posts-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .post-card {
+            background: var(--text-color);
+            border-radius: 8px;
+            overflow: hidden;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 2px 12px rgba(94, 80, 63, 0.08);
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+        }
+
+        .post-card:hover {
+            box-shadow: 0 8px 24px rgba(94, 80, 63, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .post-image-wrapper {
+            width: 100%;
+            padding-top: 56%;
+            position: relative;
+            overflow: hidden;
+            background: var(--accent-color);
+        }
+
+        .post-image-wrapper img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+
+        .post-card:hover .post-image-wrapper img { transform: scale(1.04); }
+
+        .post-content {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .post-category-tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+
+        .post-title {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .post-title a { color: var(--bg-color); }
+        .post-title a:hover { color: var(--accent-color); }
+
+        .post-meta {
+            font-size: 0.8rem;
+            color: var(--bg-color);
+            opacity: 0.65;
+            margin-bottom: 8px;
+        }
+
+        .post-excerpt {
+            font-size: 0.88rem;
+            color: var(--bg-color);
+            opacity: 0.85;
+            margin-bottom: 12px;
+            flex: 1;
+        }
+
+        .post-readmore {
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .post-readmore::after { content: "→"; }
+
+        .empty-blogs {
+            font-size: 0.95rem;
+            color: var(--bg-color);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 640px) {
+            .profile-username { font-size: 1.5rem; }
+            .profile-image-wrapper { width: 100px; height: 100px; }
+            main { padding: 28px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="navbar">
+            <a href="{% url 'home' %}" class="brand">Ink & Ideas</a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-button">Home</a>
+                {% if user.is_authenticated %}
+                    <span style="font-size: 0.9rem; color: var(--bg-color); opacity: 0.9;">Hi, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="nav-button">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-button">Login</a>
+                    <a href="{% url 'register' %}" class="nav-button nav-button__primary">Register</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <main>
+            <div class="profile-header">
+                <div class="profile-image-wrapper">
+                    {% if profile and profile.profile_img %}
+                        <img src="{{ profile.profile_img.url }}" alt="{{ user.username }}">
+                    {% else %}
+                        <img src="{% static 'download.png' %}" alt="{{ user.username }}">
+                    {% endif %}
+                </div>
+                <h1 class="profile-username">{{ user.username }}</h1>
+                <p class="profile-email">{{ user.email }}</p>
+                <div class="profile-actions">
+                    <a href="{% url 'create_post' %}" class="btn btn-primary">Create Post</a>
+                    <button type="button" id="edit-btn" class="btn">Edit Profile</button>
+                    <a href="{% url 'logout' %}" class="btn">Logout</a>
+                </div>
+            </div>
+
+            <form id="edit-form" class="profile-form" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-section">
+                    <h3 class="form-section-title">Update Profile Picture</h3>
+                    {{ profile_form.as_p }}
+                </div>
+                <div class="profile-actions">
+                    <input type="submit" value="Update Picture">
+                    <button type="button" id="cancel-btn" class="btn cancel-btn">Cancel</button>
+                </div>
+            </form>
+
+            <!-- My Published Blogs -->
+            <section class="my-blogs-section">
+                <h2 class="section-title">My Published Blogs</h2>
+                {% if posts %}
+                    <div class="posts-grid">
+                        {% for post in posts %}
+                            <article class="post-card">
+                                {% if post.featured_image %}
+                                    <div class="post-image-wrapper">
+                                        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                                    </div>
+                                {% endif %}
+                                <div class="post-content">
+    {% if post.category %}
+        <span class="post-category-tag">
+            <a href="{% url 'home' %}?category={{ post.category.name|urlencode }}">
+                {{ post.category.name }}
+            </a>
+        </span>
+    {% endif %}
+    <h2 class="post-title">
+        <a href="{% url 'detail' post.slug %}">{{ post.title }}</a>
+    </h2>
+    <p class="post-meta">{{ post.pub_date|date:"M d, Y" }}</p>
+    <p class="post-excerpt">{{ post.content|truncatewords:20 }}</p>
+    <a class="post-readmore" href="{% url 'detail' post.slug %}">Read more</a>
+</div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="empty-blogs">No published blogs yet. <a href="{% url 'create_post' %}">Create your first post</a>.</p>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const editBtn = document.getElementById('edit-btn');
+            const editForm = document.getElementById('edit-form');
+            const cancelBtn = document.getElementById('cancel-btn');
+
+            editBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                editForm.classList.add('active');
+                editBtn.style.display = 'none';
+                editForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            cancelBtn.addEventListener('click', function() {
+                editForm.classList.remove('active');
+                editBtn.style.display = 'inline-block';
+            });
+        });
+    </script>
+</body>
+</html>

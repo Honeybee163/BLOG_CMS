@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login • Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #5e503f;
+            --text-color: #eae0d5;
+            --accent-color: #c6ac8f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            font-family: "Outfit", system-ui, sans-serif;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover { color: var(--bg-color); }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            margin-bottom: 48px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .brand {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            text-decoration: none;
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 2px 12px rgba(94, 80, 63, 0.08);
+            padding: 32px;
+        }
+
+        .card-header { margin-bottom: 24px; text-align: center; }
+
+        .card-title {
+            font-family: "DM Serif Display", serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            color: var(--bg-color);
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            font-size: 0.95rem;
+            color: var(--bg-color);
+            opacity: 0.75;
+        }
+
+        form p { margin-bottom: 16px; }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--bg-color);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="username"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--accent-color);
+            border-radius: 4px;
+            background: transparent;
+            color: var(--bg-color);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--bg-color);
+            opacity: 0.5;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--bg-color);
+            box-shadow: 0 0 0 2px rgba(94, 80, 63, 0.2);
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 4px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        input[type="submit"]:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .helper-text {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--bg-color);
+            opacity: 0.8;
+        }
+
+        .helper-link { font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="navbar">
+            <a href="{% url 'home' %}" class="brand">Ink & Ideas</a>
+        </header>
+
+        <div class="auth-wrapper">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="card-title">Login</h1>
+                    <p class="card-subtitle">Welcome back. Please enter your details.</p>
+                </div>
+
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Login">
+                </form>
+
+                <p class="helper-text">
+                    Don't have an account?
+                    <a href="{% url 'register' %}" class="helper-link">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
